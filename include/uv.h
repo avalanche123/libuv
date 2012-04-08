@@ -1400,6 +1400,10 @@ UV_EXTERN struct sockaddr_in6 uv_ip6_addr(const char* ip, int port);
 UV_EXTERN int uv_ip4_name(struct sockaddr_in* src, char* dst, size_t size);
 UV_EXTERN int uv_ip6_name(struct sockaddr_in6* src, char* dst, size_t size);
 
+/* Get binary addresses' ports */
+UV_EXTERN u_short uv_ip4_port(struct sockaddr_in* addr);
+UV_EXTERN u_short uv_ip6_port(struct sockaddr_in6* addr);
+
 /* Gets the executable path */
 UV_EXTERN int uv_exepath(char* buffer, size_t* size);
 

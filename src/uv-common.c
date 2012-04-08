@@ -199,6 +199,20 @@ int uv_ip6_name(struct sockaddr_in6* src, char* dst, size_t size) {
 }
 
 
+u_short uv_ip4_port(struct sockaddr_in* addr) {
+  struct sockaddr_in addr4;
+  addr4 = *addr;
+  return ntohs(addr4.sin_port);
+}
+
+
+u_short uv_ip6_port(struct sockaddr_in6* addr) {
+  struct sockaddr_in6 addr6;
+  addr6 = *addr;
+  return ntohs(addr6.sin6_port);
+}
+
+
 static int cmp_ares_tasks(const uv_ares_task_t* a, const uv_ares_task_t* b) {
   if (a->sock < b->sock) return -1;
   if (a->sock > b->sock) return 1;
