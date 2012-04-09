@@ -187,6 +187,15 @@ struct sockaddr_in6 uv_ip6_addr(const char* ip, int port) {
 }
 
 
+int uv_ip_name(struct sockaddr* src, char* dst) {
+  if (src->sa_family == AF_INET) {
+    return uv_ip4_name((struct sockaddr_in*) src, dst, INET_ADDRSTRLEN);
+  } else {
+    return uv_ip6_name((struct sockaddr_in6*) src, dst, INET6_ADDRSTRLEN);
+  }
+}
+
+
 int uv_ip4_name(struct sockaddr_in* src, char* dst, size_t size) {
   const char* d = ares_inet_ntop(AF_INET, &src->sin_addr, dst, size);
   return d != dst;
@@ -199,17 +208,22 @@ int uv_ip6_name(struct sockaddr_in6* src, char* dst, size_t size) {
 }
 
 
+u_short uv_ip_port(struct sockaddr* addr) {
+  if (addr->sa_family == AF_INET) {
+    return uv_ip4_port((struct sockaddr_in*) addr);
+  } else {
+    return uv_ip6_port((struct sockaddr_in6*) addr);
+  }
+}
+
+
 u_short uv_ip4_port(struct sockaddr_in* addr) {
-  struct sockaddr_in addr4;
-  addr4 = *addr;
-  return ntohs(addr4.sin_port);
+  return ntohs(addr->sin_port);
 }
 
 
 u_short uv_ip6_port(struct sockaddr_in6* addr) {
-  struct sockaddr_in6 addr6;
-  addr6 = *addr;
-  return ntohs(addr6.sin6_port);
+  return ntohs(addr->sin6_port);
 }
 
 
