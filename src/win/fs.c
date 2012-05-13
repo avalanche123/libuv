@@ -89,6 +89,10 @@
     return;                                                                 \
   }
 
+uv_fs_stat_t uv_fs_req_stat(uv_fs_t* req) {
+  return req->stat;
+}
+
 
 void uv_fs_init() {
   _fmode = _O_BINARY;

@@ -1364,6 +1364,8 @@ struct uv_fs_s {
   UV_FS_PRIVATE_FIELDS
 };
 
+UV_EXTERN uv_fs_stat_t uv_fs_req_stat(uv_fs_t* req);
+
 UV_EXTERN void uv_fs_req_cleanup(uv_fs_t* req);
 
 UV_EXTERN int uv_fs_close(uv_loop_t* loop, uv_fs_t* req, uv_file file,

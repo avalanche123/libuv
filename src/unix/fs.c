@@ -60,6 +60,10 @@
   } \
   return 0;
 
+uv_fs_stat_t uv_fs_req_stat(uv_fs_t* req) {
+  return *((uv_fs_stat_t*)req->ptr);
+}
+
 
 static void uv_fs_req_init(uv_loop_t* loop, uv_fs_t* req, uv_fs_type fs_type,
     const char* path, uv_fs_cb cb) {

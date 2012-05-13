@@ -158,6 +158,8 @@ typedef struct uv_buf_t {
   char* base;
 } uv_buf_t;
 
+typedef struct _stati64 uv_fs_stat_t;
+
 typedef int uv_file;
 
 typedef SOCKET uv_os_sock_t;
