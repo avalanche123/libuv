@@ -72,7 +72,6 @@ typedef struct {
   char* errmsg;
 } uv_lib_t;
 
-#define UV_HANDLE_TYPE_PRIVATE /* empty */
 #define UV_REQ_TYPE_PRIVATE /* empty */
 
 #if __linux__
@@ -92,13 +91,6 @@ typedef struct {
 #endif
 
 #define UV_LOOP_PRIVATE_FIELDS \
-  ares_channel channel; \
-  /* \
-   * While the channel is active this timer is called once per second to be \
-   * sure that we're always calling ares_process. See the warning above the \
-   * definition of ares_timeout(). \
-   */ \
-  uv_timer_t timer; \
   /* Poll result queue */ \
   eio_channel uv_eio_channel; \
   struct ev_loop* ev; \
@@ -200,7 +192,6 @@ typedef struct {
 
 /* UV_IDLE */
 #define UV_IDLE_PRIVATE_FIELDS \
-  ev_idle idle_watcher; \
   uv_idle_cb idle_cb; \
   ngx_queue_t queue;
 
@@ -254,6 +245,7 @@ typedef struct {
 
 #elif defined(__APPLE__)  \
   || defined(__FreeBSD__) \
+  || defined(__DragonFly__) \
   || defined(__OpenBSD__) \
   || defined(__NetBSD__)
 
