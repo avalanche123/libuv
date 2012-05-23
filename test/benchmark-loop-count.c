@@ -19,30 +19,40 @@
  * IN THE SOFTWARE.
  */
 
-#include "uv.h"
 #include "task.h"
+#include "uv.h"
 
-#define NUM_TICKS 64
+#include <stdio.h>
+#include <stdlib.h>
 
+static unsigned long ticks;
 static uv_idle_t idle_handle;
-static int idle_counter;
+static uv_timer_t timer_handle;
 
 
 static void idle_cb(uv_idle_t* handle, int status) {
-  ASSERT(handle == &idle_handle);
-  ASSERT(status == 0);
-
-  if (++idle_counter == NUM_TICKS)
-    uv_idle_stop(handle);
+  ticks++;
 }
 
 
-TEST_IMPL(run_once) {
-  uv_idle_init(uv_default_loop(), &idle_handle);
+static void timer_cb(uv_timer_t* handle, int status) {
+  uv_idle_stop(&idle_handle);
+  uv_timer_stop(&timer_handle);
+}
+
+
+BENCHMARK_IMPL(loop_count) {
+  uv_loop_t* loop = uv_default_loop();
+
+  uv_timer_init(loop, &timer_handle);
+  uv_timer_start(&timer_handle, timer_cb, 5000, 0);
+
+  uv_idle_init(loop, &idle_handle);
   uv_idle_start(&idle_handle, idle_cb);
 
-  while (uv_run_once(uv_default_loop()));
-  ASSERT(idle_counter == NUM_TICKS);
+  uv_run(loop);
+
+  LOGF("loop_count: %lu ticks (%.0f ticks/s)\n", ticks, ticks / 5.0);
 
   return 0;
 }
