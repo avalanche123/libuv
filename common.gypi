@@ -167,9 +167,12 @@
         },
         'target_conditions': [
           ['_type!="static_library"', {
-            'xcode_settings': {'OTHER_LDFLAGS': ['-Wl,-search_paths_first']},
+            'xcode_settings': {'OTHER_LDFLAGS': ['-Wl,-search_paths_first', '-framework CoreServices']},
           }],
         ],
+      }],
+      ['OS=="mac" and target_arch=="ia64"', {
+        'xcode_settings': {'ARCHS': [ 'x86_64' ]}
       }],
     ],
   },
