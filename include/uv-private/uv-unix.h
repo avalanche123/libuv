@@ -133,10 +133,9 @@ struct uv__io_s {
 
 #define UV_UDP_SEND_PRIVATE_FIELDS  \
   ngx_queue_t queue;                \
-  struct sockaddr_storage addr;     \
-  socklen_t addrlen;                \
-  uv_buf_t* bufs;                   \
+  struct sockaddr_in6 addr;         \
   int bufcnt;                       \
+  uv_buf_t* bufs;                   \
   ssize_t status;                   \
   uv_udp_send_cb send_cb;           \
   uv_buf_t bufsml[UV_REQ_BUFSML_SIZE];  \
@@ -146,7 +145,6 @@ struct uv__io_s {
 
 /* TODO: union or classes please! */
 #define UV_HANDLE_PRIVATE_FIELDS \
-  int fd; \
   int flags; \
   uv_handle_t* next_pending; \
 
@@ -158,10 +156,10 @@ struct uv__io_s {
   uv__io_t write_watcher; \
   ngx_queue_t write_queue; \
   ngx_queue_t write_completed_queue; \
-  int delayed_error; \
   uv_connection_cb connection_cb; \
+  int delayed_error; \
   int accepted_fd; \
-  int blocking;
+  int fd; \
 
 
 /* UV_TCP */
@@ -170,6 +168,7 @@ struct uv__io_s {
 
 /* UV_UDP */
 #define UV_UDP_PRIVATE_FIELDS         \
+  int fd;                             \
   uv_alloc_cb alloc_cb;               \
   uv_udp_recv_cb recv_cb;             \
   uv__io_t read_watcher;              \
@@ -185,6 +184,7 @@ struct uv__io_s {
 
 /* UV_POLL */
 #define UV_POLL_PRIVATE_FIELDS        \
+  int fd;                             \
   uv__io_t io_watcher;
 
 
@@ -250,7 +250,8 @@ struct uv__io_s {
     struct uv_fs_event_s* rbe_parent; \
     int rbe_color;                    \
   } node;                             \
-  uv_fs_event_cb cb;
+  uv_fs_event_cb cb;                  \
+  int fd;                             \
 
 #elif defined(__APPLE__)  \
   || defined(__FreeBSD__) \
@@ -262,6 +263,7 @@ struct uv__io_s {
   ev_io event_watcher; \
   uv_fs_event_cb cb; \
   int fflags; \
+  int fd;
 
 #elif defined(__sun)
 
@@ -269,7 +271,8 @@ struct uv__io_s {
 # define UV_FS_EVENT_PRIVATE_FIELDS \
   ev_io event_watcher; \
   uv_fs_event_cb cb; \
-  file_obj_t fo;
+  file_obj_t fo; \
+  int fd;
 #else /* !PORT_SOURCE_FILE */
 # define UV_FS_EVENT_PRIVATE_FIELDS
 #endif
