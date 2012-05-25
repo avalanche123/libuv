@@ -171,7 +171,7 @@
           }],
         ],
       }],
-      ['OS=="mac" and target_arch=="ia64"', {
+      ['OS=="mac" and target_arch=="x64"', {
         'xcode_settings': {'ARCHS': [ 'x86_64' ]}
       }],
     ],
