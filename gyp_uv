@@ -53,6 +53,8 @@ if __name__ == '__main__':
     args.extend(['--generator-output', output_dir])
     # Tell make to write its output into the same dir
     args.extend(['-Goutput_dir=' + output_dir])
+    # Create Makefiles, not XCode projects
+    args.extend('-f make'.split())
 
   args.append('-Dcomponent=static_library')
   args.append('-Dlibrary=static_library')
