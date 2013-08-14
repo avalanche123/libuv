@@ -48,6 +48,8 @@ typedef struct {
   size_t len;
 } uv_buf_t;
 
+typedef struct stat uv_fs_stat_t;
+
 typedef int uv_file;
 
 typedef int uv_os_sock_t;

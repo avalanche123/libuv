@@ -52,6 +52,15 @@ size_t uv_req_size(uv_req_type type) {
 
 #undef XX
 
+ssize_t uv_fs_req_result(uv_fs_t* req) {
+  return req->result;
+}
+
+void* uv_fs_req_pointer(uv_fs_t* req) {
+  return req->ptr;
+}
+
+
 size_t uv_strlcpy(char* dst, const char* src, size_t size) {
   size_t n;
 

@@ -93,6 +93,11 @@
 #define IS_LETTER(c) (((c) >= L'a' && (c) <= L'z') || \
   ((c) >= L'A' && (c) <= L'Z'))
 
+uv_fs_stat_t uv_fs_req_stat(uv_fs_t* req) {
+  return req->stat;
+}
+
+
 const wchar_t JUNCTION_PREFIX[] = L"\\??\\";
 const wchar_t JUNCTION_PREFIX_LEN = 4;
 
