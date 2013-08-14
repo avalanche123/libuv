@@ -86,3 +86,7 @@ Linux 2.6 using the GCC toolchain.
 MacOS using the GCC or XCode toolchain.
 
 Solaris 121 and later using GCC toolchain.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/avalanche123/libuv/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
