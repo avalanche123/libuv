@@ -226,6 +226,7 @@ typedef struct uv_work_s uv_work_t;
 /* None of the above. */
 typedef struct uv_cpu_info_s uv_cpu_info_t;
 typedef struct uv_interface_address_s uv_interface_address_t;
+typedef struct uv_promise_s uv_promise_t;
 
 
 typedef enum {
@@ -419,6 +420,13 @@ typedef void (*uv_after_work_cb)(uv_work_t* req, int status);
 typedef void (*uv_getaddrinfo_cb)(uv_getaddrinfo_t* req,
                                   int status,
                                   struct addrinfo* res);
+
+typedef enum {
+  UV_PROMISE_FULFILLED = 0,
+  UV_PROMISE_BROKEN,
+  UV_PROMISE_PENDING,
+  UV_PROMISE_CANCELLED
+} uv_promise_status;
 
 typedef struct {
   long tv_sec;
@@ -1406,6 +1414,64 @@ UV_EXTERN void uv_timer_set_repeat(uv_timer_t* handle, uint64_t repeat);
 
 UV_EXTERN uint64_t uv_timer_get_repeat(const uv_timer_t* handle);
 
+/*
+ * this struct is returned from uv_promise_get and uv_promise_tryget.
+ * promise consumer must check status member to determine it a promise
+ * has been fulfilled or broken.
+ */
+typedef struct {
+  uv_promise_status status;
+  int code;
+  void* result;
+} uv_promise_result_t;
+
+/*
+ * uv_promise_t is the opposite of uv_async_t, and is used to send
+ * notifications to application theads from the event loop thread.
+ */
+struct uv_promise_s {
+  uv_mutex_t mutex;
+  uv_cond_t cond;
+  uv_promise_status status;
+  int code;
+  void* result;
+  unsigned int waiting;
+};
+
+UV_EXTERN int uv_promise_init(uv_promise_t* promise);
+
+/*
+ * uv_promise_fulfil is used to fulfil a promise from inside the event loop
+ *
+ * returns 0 on success, UV_EINVAL if the promise has aleardy been fulfilled
+ * or broken.
+ */
+UV_EXTERN int uv_promise_fulfil(uv_promise_t* promise, void* result);
+
+/*
+ * uv_promise_break is used to break a promise from inside the event loop
+ *
+ * returns 0 on success, UV_EINVAL if the promise has aleardy been fulfilled
+ * or broken.
+ */
+UV_EXTERN int uv_promise_break(uv_promise_t* promise, int code);
+
+/*
+ * uv_promise_get will block until a promise has been fulfilled or broken.
+ *
+ * returns a uv_promise_result_t.
+ */
+UV_EXTERN uv_promise_result_t uv_promise_get(uv_promise_t* promise);
+
+/*
+ * same as uv_promise_wait, but returns without blocking.
+ */
+UV_EXTERN uv_promise_result_t uv_promise_tryget(uv_promise_t* promise);
+
+/*
+ * promise can be free'd after this.
+ */
+UV_EXTERN void uv_promise_destroy(uv_promise_t* promise);
 
 /*
  * uv_getaddrinfo_t is a subclass of uv_req_t

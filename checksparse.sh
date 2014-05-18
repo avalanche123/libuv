@@ -53,6 +53,7 @@ src/unix/tty.c
 src/unix/udp.c
 src/uv-common.c
 src/uv-common.h
+src/promise.c
 "
 
 TESTS="
@@ -163,6 +164,7 @@ test/test-udp-options.c
 test/test-udp-send-and-recv.c
 test/test-walk-handles.c
 test/test-watcher-cross-stop.c
+test/test-promise.c
 "
 
 case `uname -s` in

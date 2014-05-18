@@ -68,6 +68,7 @@
         'src/queue.h',
         'src/uv-common.c',
         'src/uv-common.h',
+        'src/promise.c',
         'src/version.c'
       ],
       'conditions': [
